@@ -10,10 +10,10 @@ restart() {
 login() {
     echo "#read main.tin;" > /tmp/pkuxkx_${char}.tin
     echo "#var pid $$;" >> /tmp/pkuxkx_${char}.tin
-    echo "#delay {1} {#session pkuxkx pkuxkx.net 8080; ${char}; ${pass};};" >> /tmp/pkuxkx_${char}.tin
-    # ¿ÉÒÔÉèÖÃÒ»¸ö post_login µÄ alias, ÒÔ±ã login ºóÖ´ÐÐ¸ÃÃüÁî
+    echo "#delay {1} {#session pkuxkx hk.pkuxkx.com 6666; ${char}; ${pass};};" >> /tmp/pkuxkx_${char}.tin
+    # å¯ä»¥è®¾ç½®ä¸€ä¸ª post_login çš„ alias, ä»¥ä¾¿ login åŽæ‰§è¡Œè¯¥å‘½ä»¤
     # echo "#alias {post_login} {pp.start}; #delay {1} {#session pkuxkx pkuxkx.net 8080; ${char}; ${pass};};" >> /tmp/pkuxkx_${char}.tin
-    LANG="zh_CN.GBK" tt++ -G /tmp/pkuxkx_${char}.tin
+    tt++ -G /tmp/pkuxkx_${char}.tin
 }
 
 trap "restart" 30

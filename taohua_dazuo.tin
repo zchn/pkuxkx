@@ -1,0 +1,117 @@
+#class thdazuo open
+#tab thdz.start;
+#tab thdz.stop;
+
+#var thdz_total_count 0;
+#var thdz_max 95;
+#var thdazuo_count 120;
+
+#alias {calc_thdazuo_time} {
+    #format {thdz_current_time} {%T};
+    #if {${thdz_last_time} == 0} {
+        #var thdz_last_time ${thdz_current_time};
+        #return;
+    };
+
+    #math first_delta ${thdz_current_time} - ${thdz_last_time};
+    #var thdz_last_time ${thdz_current_time};
+
+    #math last_delta ${first_delta} * ${max_neili} / ${hpbrief_max_nl};
+    #math thdz_remain_nl ${max_neili} - ${hpbrief_max_nl};
+
+    #math thdz_remain_time (${first_delta} + ${last_delta}) * ${thdz_remain_nl} / 120;
+
+    #if {${thdz_remain_time} < 60} {
+        #var thdz_remain_time ${thdz_remain_time} m;
+    };
+    #else {
+        #math thdz_remain_time ${thdz_remain_time}/60;
+        #var thdz_remain_time ${thdz_remain_time} h;
+    };
+};
+
+#alias {thdz.start} {
+    set_last_quest thdz;
+    autoheal.off;
+    #var thdz_last_time 0;
+    #var thdz_remain_time nil;
+    #class thdz.inner open;
+    #alias {start_ticker} {
+        #ticker {thdz} {
+            dazuo ${thdazuo_count};
+            tuna ${thdazuo_count};
+        } {1};
+    };
+
+    #alias {stop_ticker} {
+        #unticker {thdz};
+    };
+
+    #action {你现在的气太少了} {
+        stop_ticker;
+        sleep;
+        on_wakeup {
+            start_ticker;
+        };
+    };
+
+    #action {你的内力增加了} {
+        #math thdz_total_count ${thdz_total_count}+1;
+        show_to_info force +${thdz_total_count};
+        #send {jifa};
+        #delay {2} {
+            thdz.check;
+        };
+    };
+    #class thdz.inner close;
+    #send {jifa};
+    on_health {
+        thdz.check;
+    };
+};
+
+#alias {thdz.check} {
+    stop_ticker;
+    w;n;
+    get all;
+    on_unbusy {
+        s;e;
+        do 10 eat dian xin;
+        do 10 eat qiezi;
+        do 10 eat baicai;
+        do 10 drink hulu;
+        do 10 drink hulu;
+        burden.check {
+            thdz.check.inner;
+        };
+    };
+};
+
+#alias {thdz.check.inner} {
+    #math max_neili ${youxiao_neigong} * 10 -1;
+    calc_thdazuo_time;
+    #if {${max_neili} < ${hpbrief_max_nl}} {
+        thdz.stop;
+        #showme MISSION_COMPLETE: thdz;
+        show_to_quest 内力到达瓶颈: ${hpbrief_max_nl} => ${max_neili};
+    };
+    #else {
+        #nop //        #if {@getburden{酥油茶} < 30} {
+        #nop //            thdz.stop;
+        #nop //            chain get.qian get.fan thdz.start;
+        #nop //            #return;
+        #nop //        };
+        start_ticker;
+        show_to_quest 打坐: ${hpbrief_max_nl} => ${max_neili} 还需: ${thdz_remain_time};
+    };
+};
+
+#alias {thdz.stop} {
+    unset_last_quest;
+    autoheal.on;
+    stop_ticker;
+    show_to_quest 打坐完毕;
+    #class thdz.inner kill;
+};
+
+#class thdazuo close

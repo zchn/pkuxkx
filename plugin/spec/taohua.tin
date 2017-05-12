@@ -1,0 +1,10 @@
+#class taohua open
+#var jiali_count 1;
+
+#alias {goto_shifu} {
+    gt  πÈ‘∆Õ§;
+};
+
+#var shifu guanying;
+
+#class taohua close

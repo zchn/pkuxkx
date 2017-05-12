@@ -17,7 +17,11 @@
 };
 
 #alias {chifan} {
-    #6 {drink cha};
+    do 10 eat dian xin;
+    do 10 eat qiezi;
+    do 10 eat baicai;
+    do 10 drink hulu;
+    do 10 drink hulu;
 };
 
 #alias {lm} {

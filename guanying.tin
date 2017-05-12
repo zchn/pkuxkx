@@ -1,0 +1,71 @@
+#class guanying open;
+#tab guanying.start;
+#tab guanying.stop;
+
+#alias {goto_shifu} {
+    gt  归云亭;
+};
+
+#var shifu guanying;
+
+#var guanying_count 10;
+
+#alias {guanying.start} {
+    #class guanying.inner open;
+    #alias {guanying.restart} {
+        goto_shifu;
+        on_there {
+            start_ticker;
+        };
+    };
+
+    #alias {start_ticker} {
+        #ticker {xue} {
+            xue ${shifu} for ${guanying_gongfu} ${xue_count};
+        } {0.5};
+    };
+
+    #alias {stop_ticker} {
+        #unticker {xue};
+    };
+
+    #action {你今天太累了} {
+        yun regenerate;
+    };
+
+    #action {你的内力不够} {
+        stop_ticker;
+        #delay {xue_delay} {
+            e;e;n;e;
+            sleep;
+            on_wakeup {
+                guanying.restart;
+            };
+            goto_rest;
+        } {3};
+    };
+
+    #action {{你的潜能已经发挥到极限了|没有办法学习这种技能|也许是缺乏实战经验|切磋}} {
+        guanying.stop;
+    };
+    #class guanying.inner close;
+
+    autoheal.off;
+    #var guanying_gongfu %1;
+    #if {"${guanying_gongfu}" == ""} {
+        #var guanying_gongfu @getenv{guanying_gongfu};
+    };
+    #else {
+        @setenv{guanying_gongfu;${guanying_gongfu}};
+    };
+    show_to_quest 学习: ${shifu}/${guanying_gongfu};
+    guanying.restart;
+};
+
+#alias {guanying.stop} {
+    #class guanying.inner kill;
+    #unticker {xue};
+    show_to_quest 学习结束;
+    autoheal.on;
+};
+#class guanying close;

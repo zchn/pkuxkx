@@ -1,0 +1,45 @@
+#class thdazuo open
+#tab thdt.start;
+#tab thdt.stop;
+
+#var thdt_total_count 0;
+#var thdt_max 95;
+#var thdutu_count 2;
+
+#alias {thdt.start} {
+    set_last_quest thdt;
+    #class thdt.inner open;
+    #alias {start_ticker} {
+        #ticker {thdt} {
+            du qimen dunjia for ${thdutu_count};
+        } {1};
+    };
+
+    #alias {stop_ticker} {
+        #unticker {thdt};
+    };
+
+    #action {你的内力不够} {
+        stop_ticker;
+        do 2 eat qiezi;
+        do 2 eat baicai;
+        do 5 drink hulu;
+        n;n;n;e;
+        sleep;
+        on_wakeup {
+            w;s;s;s;
+            start_ticker;
+        };
+    };
+    start_ticker;
+    #class thdt.inner close;
+};
+
+#alias {thdt.stop} {
+    unset_last_quest;
+    stop_ticker;
+    show_to_quest 读图完毕;
+    #class thdt.inner kill;
+};
+
+#class thdutu close

@@ -1,10 +1,36 @@
 #config {REPEAT ENTER} {ON}
 #config {PACKET PATCH} {0.5};
 #CONFIG {COMMAND ECHO} {ON};
-#debug action off
-#debug variable off
 
+#log a log.html
+#debug actions log
+#debug aliases log
+#debug classes log
+#debug commands on
+#debug configurations log
+#debug delays log
+#debug events log
+#debug functions log
+#debug gags log
+#debug highlights log
+#debug histories log
+#debug macros log
+#debug paths log
+#debug pathdirs log
+#debug prompts log
+#debug substitutions log
+#debug tabs log
+#debug tickers log
+#debug variables log
+                                      
 #read pathdir.tin
+
+#alias {ct_to_sengren} {do 9 n;e;ne;eu;enter}
+#alias {sengren_to_ct} {out;wd;sw;w;do 9 s}
+#alias {sengren_to_jing} {out;wd;sw;w;do 4 n;ne;e;ne;do 2 n;do 3 nu;eu;write jing}
+#alias {jing_to_sengren} {wd;do 3 sd; s; s; sw; w; sw; do 4 s; e;ne;eu;enter;ask sengren about done}
+
+#nop //#read plugin/xiaoyaoxing-2017-03-12.tin
 
 #read plugin/util.tin
 #read plugin/action.tin
@@ -15,7 +41,6 @@
 #read plugin/status.tin
 #read plugin/gps.tin
 #read plugin/env.tin;
-#read plugin/tuna.tin
 #read plugin/dazuo.tin
 #read plugin/war.tin
 #read plugin/yue.tin
@@ -77,3 +102,4 @@
     #var os_name ${os_name}[1];
 };
 #read plugin/os/${os_name}.tin;
+
